@@ -1,0 +1,12 @@
+{
+    "#p": "font_post",
+    "#g": "font_get",
+    "#d": "font_delete",
+
+
+    "$g": "g",
+
+
+    "@ac": "a",
+    "@ct": "a"
+}
