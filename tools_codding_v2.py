@@ -17,17 +17,16 @@ history ="012345678910"
 def write(replacement,command):
     global history
     history ="012345678910"
-    for n in range(len(command)+1):
-        keyboard.send('\b')
+    # for n in range(len(command)+1):
+    #     keyboard.send('\b')
+    print(replacement)
     pyperclip.copy(replacement)
-    keyboard.send("Ctrl+v")
-
-    # Command
-    # Ctrl
+    # keyboard.send("command+v")
 
 
 def check_map_command(history):
     global command_list,message_json
+    # keyboard.wait()
     for index,command in enumerate(command_list) :
         if command in history :
             print('true',command,history)
@@ -38,7 +37,12 @@ def released(release):
         global history
         history=history[1:]+release
         print(history)
-    elif release=='space':
+    # elif release=='space':
+    # elif release=='command':
+    elif release=='right shift':
+    # elif release=='ƒ':
+    # else :
+        print(release)
         check_map_command(history)
     
 
@@ -46,7 +50,7 @@ def mainv2(command_list,message_json,history):
     
     # for index,command in enumerate(command_list):
     #     # keyboard.add_abbreviation(command, message_json[index])
-    #     keyboard.add_abbreviation(command, lambda: keyboard.write('foobar'))
+    # keyboard.add_abbreviation(command, lambda: keyboard.write('foobar'))
     keyboard.on_release(lambda e: released(e.name))
 
         # 
