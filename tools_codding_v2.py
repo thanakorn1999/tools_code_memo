@@ -5,9 +5,9 @@ import json
 import pandas as pd
 import re
 
-import win32api
-win32api.LoadKeyboardLayout('00000409',1) # to switch to english
-history ="01234567"
+# import win32api
+# win32api.LoadKeyboardLayout('00000409',1) # to switch to english
+history ="012345"
 
 def load_data_excel():
     data = pd.read_excel('./memo/memo.xlsx')
@@ -16,21 +16,21 @@ def load_data_excel():
     command_list = data['command'].values.tolist()
 
     # for mac
-    # new_command_list =[]
-    # for command in command_list:
-    #     text = command
-    #     if '!' in text:
-    #         text = re.sub('!', '1', text)
-    #     if '@' in text:
-    #         text = re.sub('@', '2', text)
-    #     if '#' in text:
-    #         text = re.sub('#', '3', text)
-    #     if '$' in text:
-    #         text = re.sub('$', '4', text)
-    #     if '%' in text:
-    #         text = re.sub('%', '5', text)
-    #     new_command_list.append(text)
-    # command_list=new_command_list
+    new_command_list =[]
+    for command in command_list:
+        text = command
+        if '!' in text:
+            text = re.sub('!', '1', text)
+        if '@' in text:
+            text = re.sub('@', '2', text)
+        if '#' in text:
+            text = re.sub('#', '3', text)
+        if '$' in text:
+            text = re.sub('$', '4', text)
+        if '%' in text:
+            text = re.sub('%', '5', text)
+        new_command_list.append(text)
+    command_list=new_command_list
 
     print(command_list)
     return command_list,message_json
@@ -39,13 +39,13 @@ def write(replacement,command):
     global history
     history ="01234567"
     for n in range(len(command)):
-        keyboard.send('\b')  # for windows
-        # keyboard.send('delete') # for mac
+        # keyboard.send('\b')  # for windows
+        keyboard.send('delete') # for mac
         
     pyperclip.copy(replacement)
     
-    keyboard.send("ctrl+v") # for windows
-    # keyboard.send("command+v") # for mac
+    # keyboard.send("ctrl+v") # for windows
+    keyboard.send("command+v") # for mac
 
 
 def check_map_command(history):
