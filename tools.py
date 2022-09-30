@@ -29,6 +29,8 @@ def load_data_excel():
             text = re.sub('$', '4', text)
         if '%' in text:
             text = re.sub('%', '5', text)
+          if '_' in text:
+            text = re.sub('_', '-', text)
         new_command_list.append(text)
     command_list=new_command_list
 
@@ -65,7 +67,6 @@ def released(release):
     # elif release=='space':
     # elif release=='command':
     elif release=='right shift':
-    # elif release=='ƒ':
         check_map_command(history)
     else :
         print(release)
