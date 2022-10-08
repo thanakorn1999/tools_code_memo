@@ -1,21 +1,19 @@
 
 import pyperclip
 import keyboard
-import json
 import pandas as pd
 import re
+from sys import platform
+if platform =='win32':
+    import win32api
+    win32api.LoadKeyboardLayout('00000409',1) # to switch to english
+    cm_copy ="ctrl+v"
+    cm_del ="\b"
+elif platform =='darwin':
+    cm_copy ="command+v"
+    cm_del ="delete"
 
-# import win32api
-# win32api.LoadKeyboardLayout('00000409',1) # to switch to english
-history ="012345"
-
-def load_data_excel():
-    data = pd.read_excel('./memo/memo.xlsx')
-    data = data.dropna()
-    message_json = data['message'].values.tolist()
-    command_list = data['command'].values.tolist()
-
-    # for mac
+def chang_command_mac(command_list):
     new_command_list =[]
     for command in command_list:
         text = command
@@ -25,30 +23,38 @@ def load_data_excel():
             text = re.sub('@', '2', text)
         if '#' in text:
             text = re.sub('#', '3', text)
-        if '$' in text:
-            text = re.sub('$', '4', text)
+        # if '$' in text:
+        #     text = re.sub('$', '4', text)
         if '%' in text:
             text = re.sub('%', '5', text)
         if '_' in text:
             text = re.sub('_', '-', text)
         new_command_list.append(text)
-    command_list=new_command_list
 
-    print(command_list)
-    return command_list,message_json
+    print(new_command_list)
+    return new_command_list
+
+def load_data_excel(platform):
+    data = pd.read_excel('./memo/memo.xlsx')
+    data = data.dropna()
+    #? need to update : sort
+    message_json = data['message'].values.tolist()
+    command_list = data['command'].values.tolist()
+
+    if platform == 'darwin':
+        command_list = chang_command_mac(command_list)
+
+    return command_list, message_json
 
 def write(replacement,command):
-    global history
-    history ="01234567"
+    global history, cm_copy, cm_del
+    history ="0123456"
+    #? need to update : find
     for n in range(len(command)):
-        # keyboard.send('\b')  # for windows
-        keyboard.send('delete') # for mac
-        
-    pyperclip.copy(replacement)
+        keyboard.send(cm_del)
     
-    # keyboard.send("ctrl+v") # for windows
-    keyboard.send("command+v") # for mac
-
+    pyperclip.copy(replacement)
+    keyboard.send(cm_copy)
 
 def check_map_command(history):
     global command_list,message_json
@@ -58,28 +64,26 @@ def check_map_command(history):
             print('true',command,history)
             write(message_json[index],command_list[index])
 
-def released(release):
+def released(release, history):
+    global cm_del
+
     if(len(release))==1:
-        global history
         history=history[1:]+release
         print(history)
-
-    # elif release=='space':
-    # elif release=='command':
     elif release=='right shift':
-        check_map_command(history)
+        if history=='0123456':
+            keyboard.send(cm_del)
+        else :
+            check_map_command(history)
     else :
         print(release)
-    
+        # keyboard.send(cm_del)
 
-def mainv2(command_list,message_json,history):
-    
-    keyboard.on_release(lambda e: released(e.name)) # old logic keyboard.add_abbreviation('@@', 'my.long.email@example.com')
-    
+def main(history):
+    keyboard.on_release(lambda e: released( e.name ,history)) # old logic keyboard.add_abbreviation('@@', 'my.long.email@example.com')
     keyboard.wait()
 
+command_list ,message_json= load_data_excel( platform)  #load data from excel file.
+history ="0123456"
 
-command_list,message_json =load_data_excel()  #load data from excel file.
-# command_list,message_json =load_data() #load data from json file.
-
-mainv2(command_list,message_json,history) 
+main(history) 
