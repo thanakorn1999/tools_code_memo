@@ -1,7 +1,7 @@
 
-from email.headerregistry import AddressHeader
-from ssl import ALERT_DESCRIPTION_ACCESS_DENIED
-from urllib.request import AbstractDigestAuthHandler
+# from email.headerregistry import AddressHeader
+# from ssl import ALERT_DESCRIPTION_ACCESS_DENIED
+# from urllib.request import AbstractDigestAuthHandler
 import pyperclip
 import keyboard
 import pandas as pd
@@ -96,7 +96,8 @@ def released(release):
         print(history)
     elif release=='right shift':
         check_map_command(history)
-    elif release=='backspace':
+    # elif release=='backspace':delete
+    elif release=='delete':
         back_space(False)
     else :
         print(release)
