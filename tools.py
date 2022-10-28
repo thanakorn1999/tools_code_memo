@@ -63,7 +63,7 @@ def load_data_excel(platform):
 
 def write(replacement,command):
     global history, cm_paste, cm_del
-    history ="0123456"
+    history ="012345678"
 
     save_old_copy = pyperclip.paste()
     for n in range(len(command)):
@@ -115,5 +115,5 @@ elif platform =='darwin':
     cm_del ="delete"
 
 command_list ,message_json= load_data_excel(platform)
-history ="0123456"
+history ="012345678"
 main(history)
