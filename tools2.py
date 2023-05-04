@@ -17,21 +17,7 @@ def back_space(action):
     if action :
         keyboard.send(cm_del)
     history='0'+history[:len(history)-1]
-
-def write(replacement,command):
-    global history, cm_paste, cm_del, default_history
-    history = default_history
-
-    save_old_copy = pyperclip.paste()
-    for n in range(len(command)):
-        keyboard.send(cm_del)
-
-    pyperclip.copy(replacement)
-    keyboard.send(cm_paste)
-    #! need to update logic error
-    time.sleep(0.2)
-    pyperclip.copy(save_old_copy)
-
+    print('del :',history)
 
 def chang_command_mac(command_list):
     new_command_list =[]
@@ -43,8 +29,6 @@ def chang_command_mac(command_list):
             text = re.sub('@', '2', text)
         if '#' in text:
             text = re.sub('#', '3', text)
-        # if '$' in text:
-        #     text = re.sub('$', '4', text)
         if '%' in text:
             text = re.sub('%', '5', text)
         if '_' in text:
@@ -55,35 +39,35 @@ def chang_command_mac(command_list):
     return new_command_list
 
 def load_data_excel(platform):
-    # data = pd.read_excel('./memo/memo.xlsx')
-        sheets = ['vue', 'node']
+    sheets = ['vue', 'node']
     
     data = pd.concat([pd.read_excel('./memo/memo.xlsx', sheet_name = sheet) for sheet in sheets], ignore_index = True)
 
     data['command'] = data['command'].astype(str)
     data['message'] = data['message'].astype(str)
 
-    data = data.dropna()
 
 
+    lenght_command=[]
     for text in data['command']:
         lenght_command.append(len(str(text)))
 
 
-        
     data['lenght_command'] = lenght_command
     data = data.sort_values(by='lenght_command', ascending=False)
 
     message_json = data['message'].values.tolist()
     command_list = data['command'].values.tolist()
+
     
-    #! need to update logic error
+    
+    # air_quality["london_mg_per_cubic"] = air_quality["station_london"] * 1.882
+
     if platform == 'darwin':
         command_list = chang_command_mac(command_list)
 
     return command_list, message_json
 
-<<<<<<< HEAD
 def write(replacement,command):
     global history, cm_paste, cm_del
     history ="012345678"
@@ -96,8 +80,6 @@ def write(replacement,command):
     keyboard.send(cm_paste)
     time.sleep(0.2)
     pyperclip.copy(save_old_copy)
-=======
->>>>>>> 916cf16 (update select sheet_name)
 
 
 def check_map_command(history):
@@ -127,8 +109,6 @@ def released(release):
     else :
         print(release)
 
-
-
 def main(history):
     keyboard.on_release(lambda e: released( e.name )) # old logic keyboard.add_abbreviation('@@', 'my.long.email@example.com')
     keyboard.wait()
@@ -142,11 +122,5 @@ elif platform =='darwin':
     cm_del ="delete"
 
 command_list ,message_json= load_data_excel(platform)
-<<<<<<< HEAD
 history ="012345678"
-=======
-default_history='0123456'
-history =default_history
-
->>>>>>> 916cf16 (update select sheet_name)
 main(history)
