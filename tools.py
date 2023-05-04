@@ -56,7 +56,7 @@ def chang_command_mac(command_list):
 
 def load_data_excel(platform):
     # data = pd.read_excel('./memo/memo.xlsx')
-        sheets = ['vue', 'node']
+    sheets = ['react', 'node']
     
     data = pd.concat([pd.read_excel('./memo/memo.xlsx', sheet_name = sheet) for sheet in sheets], ignore_index = True)
 
@@ -65,12 +65,10 @@ def load_data_excel(platform):
 
     data = data.dropna()
 
-
+    lenght_command=[]
     for text in data['command']:
         lenght_command.append(len(str(text)))
 
-
-        
     data['lenght_command'] = lenght_command
     data = data.sort_values(by='lenght_command', ascending=False)
 
@@ -83,21 +81,7 @@ def load_data_excel(platform):
 
     return command_list, message_json
 
-<<<<<<< HEAD
-def write(replacement,command):
-    global history, cm_paste, cm_del
-    history ="012345678"
 
-    save_old_copy = pyperclip.paste()
-    for n in range(len(command)):
-        keyboard.send(cm_del)
-
-    pyperclip.copy(replacement)
-    keyboard.send(cm_paste)
-    time.sleep(0.2)
-    pyperclip.copy(save_old_copy)
-=======
->>>>>>> 916cf16 (update select sheet_name)
 
 
 def check_map_command(history):
@@ -142,11 +126,7 @@ elif platform =='darwin':
     cm_del ="delete"
 
 command_list ,message_json= load_data_excel(platform)
-<<<<<<< HEAD
-history ="012345678"
-=======
 default_history='0123456'
 history =default_history
 
->>>>>>> 916cf16 (update select sheet_name)
 main(history)
